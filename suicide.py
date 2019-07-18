@@ -1,8 +1,9 @@
 # Data Visualization of Suicide Trends between 1987 and 2014
 import pandas as pd
-import matplotlib.pyplot as plt
+
 suicide = pd.read_csv(r"C:\Users\user\Desktop\Projects\Py Practice\Suicide\master.csv")
 #main code block starts now
+
 def main():
     print("Down below are the list of countries for which details are available.")
     for i in suicide['country'].unique():
@@ -13,9 +14,9 @@ def main():
         i = i.capitalize()
         print(i)
     g = input("You can now look select the gender you want to look into:")  #gender
-    o = stats(c, g)
-    o.show()
-    
+    ob = stats(c, g)
+    ob.show()
+    ob.show_age()
 class stats:
     def __init__(self, country, gender):
         self.c = country
@@ -25,9 +26,13 @@ class stats:
         print("In",self.c,",people who had identified themselves as",self.g,"constituted for about", round((sum(suicide[suicide['sex'] == self.g]['suicides_no'][suicide['country'] == self.c])/sum(suicide['suicides_no'][suicide['country'] == self.c]))*100,2),"% of total suicides committed.")
         #Shows the dsitribution of suicides between men and women
     def show(self):
-        #We want to create separate graphs for age-groups and their propensity for suicide over the years
+        #We want to visualize the propensity for suicide amongst said gender in this country over the years
         # X: YEAR; Y: SUICIDES
         s1 = suicide[suicide['country'] == self.c][suicide['sex'] == self.g].groupby(['year']).sum()['suicides_no']
         s1.plot(kind = 'bar')
+    def show_age(self):
+        #We want to create separate graphs for age-groups and their propensity for suicide over the years
+        s2 = suicide[suicide['country'] == self.c][suicide['sex'] == self.g].groupby(['age']).sum()['suicides_no']
+        s2.plot(kind = 'bar')
 main()
     
